@@ -84,7 +84,7 @@ void FourOWidget::popBaBa()
 {
     BaBaPopup* bbp = new BaBaPopup(this);
     bbp->setCenter(popPoint + mapToGlobal(QPoint()), babaLen);
-    bbp->start(-5, -0.5, 0.3, 0.3, 90, 3, 0.1);
+    bbp->start(-5, -0.5, 0.5, 0.3, 90, 3, 0.1);
 }
 
 void FourOWidget::paintEvent(QPaintEvent *)
