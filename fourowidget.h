@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QSequentialAnimationGroup>
 
 #define PI 3.141592
 
@@ -17,6 +18,7 @@ public:
     explicit FourOWidget(QWidget *parent = nullptr);
 
     void startAnimation();
+    void popBaBa();
 
 protected:
     void paintEvent(QPaintEvent *) override;
@@ -36,7 +38,10 @@ private:
     int pullOutProgress = 0;  // 一阶段：憋红脸拉屎
     int droopProgress = 0;    // 二阶段：耷拉下垂
     int downfallProgress = 0; // 三阶段：坠落
-    int xRotateProgress = 0;  // 四阶段：砸中X并开始旋转
+    int xRotateProgress = 0;  // 四阶段：砸中X并开始旋转，最大值1080（3圈）
+
+    QPointF popPoint;
+    QSequentialAnimationGroup* group = nullptr;
 };
 
 #endif // FOUROWIDGET_H
