@@ -35,7 +35,7 @@ void FourOWidget::startAnimation()
         QPropertyAnimation* ani = new QPropertyAnimation(this, "pullOutProgress");
         ani->setStartValue(0);
         ani->setEndValue(100);
-        ani->setDuration(700);
+        ani->setDuration(1000);
         ani->setEasingCurve(QEasingCurve::OutCubic);
         group->addAnimation(ani);
     }
@@ -61,8 +61,8 @@ void FourOWidget::startAnimation()
     {
         QPropertyAnimation* ani = new QPropertyAnimation(this, "xRotateProgress");
         ani->setStartValue(0);
-        ani->setEndValue(1080);
-        ani->setDuration(2500);
+        ani->setEndValue(X_ROTATE_ANGLE);
+        ani->setDuration(5000);
         ani->setEasingCurve(QEasingCurve::OutQuart);
         group->addAnimation(ani);
 
@@ -84,7 +84,7 @@ void FourOWidget::popBaBa()
 {
     BaBaPopup* bbp = new BaBaPopup(this);
     bbp->setCenter(popPoint + mapToGlobal(QPoint()), babaLen);
-    bbp->start(-10, 0, 1, 1, 90, 3, 0.1);
+    bbp->start(-5, -0.5, 0.3, 0.3, 90, 3, 0.1);
 }
 
 void FourOWidget::paintEvent(QPaintEvent *)
@@ -143,8 +143,9 @@ void FourOWidget::paintEvent(QPaintEvent *)
 
     // 画掉落的 -
     const double barLen = widthOfN * 0.8;
+    const double delta = widthOfN * 0.25; // 中间绕着空白的长度
     const double barRight = paddingLeft + barLen + widthOfN * 0.1;
-    const double barTop = textBottom - fontHeight / 3.6; // 纵坐标，根据字体4的位置慢慢调
+    const double barTop = textBottom - fontHeight / 4; // 纵坐标，根据字体4的位置慢慢调
     const double barLeft = barRight - barLen * pullOutProgress / 100.0;
 
     if (!pullOutProgress) // 静态
@@ -157,22 +158,23 @@ void FourOWidget::paintEvent(QPaintEvent *)
     {
         const double angle = 90 * droopProgress / 100;
         const double degree = angle * 2 * PI / 360;
-        const double leftX = barRight - cos(degree) * barLen;
+        const double rightX = barRight + delta * droopProgress / 100;
+        const double leftX = rightX - cos(degree) * barLen;
         const double leftY = barTop + sin(degree) * barLen;
 
-        painter.drawLine(QPointF(leftX, leftY), QPointF(barRight, barTop));
+        painter.drawLine(QPointF(leftX, leftY), QPointF(rightX, barTop + delta * droopProgress / 100));
     }
     else if (downfallProgress && !xRotateProgress) // 阶段三：坠落
     {
-        const double top = barTop;
+        const double top = barTop + delta;
         const double bottom = xRect.top();
-        const double x = barRight;
+        const double x = barRight + delta;
         const double y = top + (bottom - top - barLen / 2) * downfallProgress / 100;
 
         painter.drawLine(QPointF(x, y), QPointF(x, y + barLen));
 
         this->babaLen = barLen;
-        this->popPoint = xRect.topLeft();
+        this->popPoint = xRect.topLeft() + QPointF(widthOfN * 0.1, 0);
     }
 
     // 画旋转的 X
@@ -189,7 +191,7 @@ void FourOWidget::paintEvent(QPaintEvent *)
         const int turns = 3; // 绕的圈数
         const QPointF center = xRect.center();
         const double radius = sqrt(xRect.width() * xRect.width() / 2);
-        const double angle = 360 * turns * xRotateProgress / 1080;
+        const double angle = 360 * turns * xRotateProgress / X_ROTATE_ANGLE;
 
         auto getPos = [=](double rotate) {
             return QPointF(

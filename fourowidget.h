@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QSequentialAnimationGroup>
 
+#define X_ROTATE_ANGLE 720
+
 class FourOWidget : public QWidget
 {
     Q_OBJECT
