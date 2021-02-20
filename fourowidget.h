@@ -5,8 +5,6 @@
 #include <QWidget>
 #include <QSequentialAnimationGroup>
 
-#define PI 3.141592
-
 class FourOWidget : public QWidget
 {
     Q_OBJECT
@@ -41,6 +39,7 @@ private:
     int xRotateProgress = 0;  // 四阶段：砸中X并开始旋转，最大值1080（3圈）
 
     QPointF popPoint;
+    double babaLen = 0;
     QSequentialAnimationGroup* group = nullptr;
 };
 

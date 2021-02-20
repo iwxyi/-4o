@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <math.h>
 #include "fourowidget.h"
+#include "babapopup.h"
 
 FourOWidget::FourOWidget(QWidget *parent) : QWidget(parent)
 {
@@ -43,7 +44,7 @@ void FourOWidget::startAnimation()
         QPropertyAnimation* ani = new QPropertyAnimation(this, "droopProgress");
         ani->setStartValue(0);
         ani->setEndValue(100);
-        ani->setDuration(500);
+        ani->setDuration(600);
         ani->setEasingCurve(QEasingCurve::OutBounce);
         group->addAnimation(ani);
     }
@@ -53,7 +54,7 @@ void FourOWidget::startAnimation()
         ani->setStartValue(0);
         ani->setEndValue(100);
         ani->setDuration(500);
-        ani->setEasingCurve(QEasingCurve::InExpo);
+        ani->setEasingCurve(QEasingCurve::InQuint);
         group->addAnimation(ani);
     }
 
@@ -81,7 +82,9 @@ void FourOWidget::startAnimation()
  */
 void FourOWidget::popBaBa()
 {
-
+    BaBaPopup* bbp = new BaBaPopup(this);
+    bbp->setCenter(popPoint + mapToGlobal(QPoint()), babaLen);
+    bbp->start(-10, 0, 1, 1, 90, 3, 0.1);
 }
 
 void FourOWidget::paintEvent(QPaintEvent *)
@@ -164,9 +167,11 @@ void FourOWidget::paintEvent(QPaintEvent *)
         const double top = barTop;
         const double bottom = xRect.top();
         const double x = barRight;
-        const double y = top + (bottom - top - barLen) * downfallProgress / 100;
+        const double y = top + (bottom - top - barLen / 2) * downfallProgress / 100;
 
         painter.drawLine(QPointF(x, y), QPointF(x, y + barLen));
+
+        this->babaLen = barLen;
         this->popPoint = xRect.topLeft();
     }
 
