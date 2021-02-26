@@ -84,13 +84,14 @@ void FourOWidget::popBaBa()
 {
     BaBaPopup* bbp = new BaBaPopup(this);
     bbp->setCenter(popPoint + mapToGlobal(QPoint()), babaLen);
-    bbp->start(-5, -0.5, 0.5, 0.3, 90, 3, 0.1);
+    bbp->start(-4, -0.3, 0.5, 0.3, 90, 3, 0.1);
 }
 
 void FourOWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     // 字体属性
     QFont font;
@@ -203,6 +204,14 @@ void FourOWidget::paintEvent(QPaintEvent *)
         painter.drawLine(getPos(135), getPos(-45));
         painter.drawLine(getPos(45), getPos(-135));
     }
+
+    // 画一个状态栏icon
+    painter.setPen(Qt::white);
+    QPixmap icon(QPixmap(":/images/icon"));
+    icon = icon.scaledToHeight(int(fontHeight-1), Qt::SmoothTransformation);
+    const int pd = (statusBarHeight - icon.height()) / 2;
+    QRectF iconRect(padding + widthOf4 * 2 + pd, pd, statusBarHeight - pd * 2, statusBarHeight - pd * 2);
+    painter.drawPixmap(iconRect, icon, QRect(0, 0, icon.width(), icon.height()));
 }
 
 void FourOWidget::keyPressEvent(QKeyEvent *event)

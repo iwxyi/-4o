@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="icon">images/security_guards.png</file>
+    </qresource>
+</RCC>
